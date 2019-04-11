@@ -1,32 +1,23 @@
-# Mywriter
+# 添加MVC框架
+
+## 1.将mvc系统demo与spring-batch合并，配置pom.xml
+## 2.修改controller内容，为batch添加启动器
+  ```
+  @RequestMapping(value = "/batch", method = RequestMethod.GET)
+	public ModelAndView execute() {
+		ModelAndView model = new ModelAndView();
+        String[] springConfig = { "spring/batch/jobs/job-hello-world.xml" };	
+        ApplicationContext context = new ClassPathXmlApplicationContext(springConfig);
+        JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
+        Job job = (Job) context.getBean("helloWorldJob");
+   ```
+   ```
+   model.setViewName("batch");
+   ```
+## 3.修改hello.jsp当中的btn链接
+        <p>
+          <a class="btn btn-primary btn-lg" href="http://localhost:8080/batch" role="button">Start batch</a>
+        </p>
+     
 
 
-1.为pom.xml添加一些依赖以解决demo中运行时存在相关的包无法import的问题
-________________________________________________________________
-添加了以下
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-core</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-2.添加Mywriter类，实现将文件写为txt文件的方法，保存在xml/outputs/report.txt
-_______________________________________________________________________
-3.修改job-hello-world.xml
